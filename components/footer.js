@@ -9,7 +9,7 @@ class Footer extends HTMLElement {
         <div class="mx-5">
           <div class="row mbr-white">
             <div class="align-self-center">
-              <img src="assets/images/euflag.jpg" alt="euflag">
+              <img src="/assets/images/euflag.jpg" alt="euflag">
             </div>
             <div class="col-12 col-md-6 col-lg-7">
               <p class="mbr-text mbr-fonts-style mb-0"><strong>
