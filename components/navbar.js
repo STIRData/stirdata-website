@@ -10,7 +10,7 @@ class Navbar extends HTMLElement {
           <div class="container-fluid">
             <div class="navbar-brand">
               <span class="navbar-logo">
-                <a href="index.html">
+                <a href="/">
                   <img src="assets/images/stirdata-logo.png" alt="stirdata_logo" style="height: 4.3rem;">
                 </a>
               </span>
@@ -25,12 +25,12 @@ class Navbar extends HTMLElement {
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="about.html">About</a></li>
-                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="partners.html">Partners</a></li>
-                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="ecg.html">ECG</a></li>
-                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="objectives.html">Objectives</a></li>
-                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="news.html">News</a></li>
+                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/about">About</a></li>
+                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/partners">Partners</a></li>
+                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/ecg">ECG</a></li>
+                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/objectives">Objectives</a></li>
+                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/news">News</a></li>
               </ul>
             </div>
           </div>
