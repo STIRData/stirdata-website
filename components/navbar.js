@@ -30,6 +30,7 @@ class Navbar extends HTMLElement {
                 <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="partners.html">Partners</a></li>
                 <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="ecg.html">ECG</a></li>
                 <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="objectives.html">Objectives</a></li>
+                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="news.html">News</a></li>
               </ul>
             </div>
           </div>
