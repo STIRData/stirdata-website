@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Site made with Mobirise Website Builder v5.2.0, https://mobirise.com -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Mobirise v5.2.0, mobirise.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon">
+  <meta name="description" content="">
+  <title>STIRData</title>
+  <link rel="stylesheet" href="../assets/tether/tether.min.css">
+  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-reboot.min.css">
+  <link rel="stylesheet" href="../assets/dropdown/css/style.css">
+  <link rel="stylesheet" href="../assets/socicon/css/styles.css">
+  <link rel="stylesheet" href="../assets/theme/css/style.css">
+  <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
+  <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+  <script src="../components/navbar.js" type="text/javascript" defer></script>
+  <script src="../components/banner.js" type="text/javascript" defer></script>
+  <script src="../components/footer.js" type="text/javascript" defer></script>
+</head>
+<body>
+  <navbar-component></navbar-component>
+
+  <banner-component sub-title="Activity 7 - Transformation and publication"></banner-component>
+
+  <section class="content4 cid-sptncs5cVA" id="content4-1y">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="title col-md-12 col-lg-12">
+          <h1 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
+            <strong>Internal testing and evaluation of the toolset and platform</strong>
+          </h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <p class="mbr-text mbr-fonts-style display-7">
+            In this post, we are reporting on the experience with evaluation and testing of the tools used in the project for the semantic enrichment of data from business registries, their transformation and publication according to the <a href="https://stirdata.github.io/data-specification/">STIRData specification</a>, and pointing to their alternatives.
+            The goal of this post is to provide the business registry operators with information about the technical requirements of publishing semantically enriched data, the tools available to implement it, and the processes we use in the project to achieve it, so that they can reuse what we do in the project, or be inspired and choose an alternative way which still fulfils the requirements.
+            In addition, we report on the experience with the initial version of the STIRData platform, which uses the semantically enriched data to provide a user-facing service.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h2 class="mbr-section-title mbr-fonts-style align-center mb-4 display-6">
+            <strong>Semantic enrichment of data from business registries</strong>
+          </h2>
+          <p class="mbr-text mbr-fonts-style display-7">
+            During the course of the project, we found the data from business registries across Europe in an uninteroperable state.
+            This was expected, as supplying tools, methodologies and examples of how to improve the state, is the core of this project.
+            To achieve the semantic enrichment of data from the business registries and its proper publication, so that it can be used by the STIRData platform and other applications, a process of several steps is necessary.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image1 cid-sptnMrVVWa" id="image1-24">
+    <div class="container">
+      <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-5">
+        The process
+      </h3>
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-5">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/etl-process.svg" alt="ETL process overview">
+            <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+              ETL process overview
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              Here we describe the overall data flow process. First, the data needs to be accessed. Currently, the data exists in the form of data files in various non-Linked Data formats such as CSV, JSON, and XML or it is accessible through an API, which needs to be queried in order to get the data.
+            </p>
+            <p class="mbr-text mbr-fonts-style display-7">
+              Second, the data needs to be transformed to RDF, semantically enriched and linked to other relevant data to make it interoperable.
+            </p>
+            <p class="mbr-text mbr-fonts-style display-7">
+              Finally, the enriched data needs to be published in a SPARQL endpoint, which can be later queried by the platform or other applications.¨
+              In this post, we omit the procedural issues of who hosts the endpoint and who does the data transformations and just focus on the technical side of the process.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <p class="mbr-text mbr-fonts-style display-7">
+            The reader might have noticed that the steps identified in the previous paragraph correspond to the ETL - Extract, Transform, Load paradigm well known from data transformation and integration tasks.
+            As we will show next, there are two general approaches to implementing such a process, and we explore both.
+            Either a mapping in a formal language (the <a href="http://islab.ntua.gr/ns/d2rml/">D2RML</a> way) or a pipeline of specific data transformation steps (the <a href="https://etl.linkedpipes.com">LinkedPipes ETL</a> way) are created for a certain data source, specifying how the data can be transformed from the initial to the final state.
+            The mapping or the pipeline are then executed to obtain the semantically enriched data.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-5">
+            The tools used in the project
+          </h3>
+          <p class="mbr-text mbr-fonts-style display-7">
+            As mentioned in the description of the semantic data enrichment process, we use two tools in the project, each implementing a slightly different approach to defining and executing the data transformations.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            <strong>LinkedPipes ETL</strong>
+          </h4>
+          <p class="mbr-text mbr-fonts-style display-7">
+            With LinkedPipes ETL (LP-ETL), the transformation designer creates a data transformation pipeline consisting of individual steps implemented by reusable components available in the tool.
+            Some of the components provide means of downloading the data from the source and transforming it to RDF, where necessary.
+            A different set of components transform the data to the desired shape, in our case, according to the STIRData specification.
+            This is usually done by a series of SPARQL queries.
+            Finally, there is a set of components allowing the pipeline designer to load the transformed data into a SPARQL endpoint.
+            This covers the whole ETL process.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image1 cid-sptnMrVVWa" id="image1-24">
+    <div class="container">
+      <h5 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+        Showcase
+      </h5>
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/lp-etl-pipeline.webp" alt="LinkedPipes ETL pipeline">
+            <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+              LinkedPipes ETL pipeline example
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              Here, we showcase how LP-ETL is used to transform and publish the data from the Czech Business Registry.
+              In this pipeline, the source is already RDF, but has a different shape than required by the <a href="https://stirdata.github.io/data-specification/">STIRData specification</a>.
+            </p>
+            <p class="mbr-text mbr-fonts-style display-7">
+              In the LP-ETL pipeline, the data from the Czech Business Registry, in its source RDF shape, are loaded from an RDF data dump.
+              Alternatively, they could be loaded from a SPARQL endpoint.
+              Next, the RDF shape of the data is changed to be compliant with the STIRData specification using a SPARQL CONSTRUCT query.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image2 cid-sptnP1ZSPe" id="image2-25">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/lp-etl-sparql-construct.webp" alt="SPARQL CONSTRUCT query in LinkedPipes ETL">
+            <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
+              SPARQL CONSTRUCT query in LinkedPipes ETL
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              Next, the data is linked to LAU and NUTS-3 code lists, again using SPARQL CONSTRUCT queries.
+              Note that the Postcode to LAU mappings are originally in CSV files, which are first transformed to RDF by LP-ETL.
+              At the end of the pipeline, the data is saved in the form of RDF dumps, both in RDF TriG and HDT and stored in a local file system.
+              As we are also experimenting with Linked Data Fragments (#LD) as an alternative to publishing the data in a SPARQL endpoint, the pipeline pings the #LD server to reload the data.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image1 cid-sptnMrVVWa" id="image1-24">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/lp-etl-export-fuseki.webp" alt="LinkedPipes ETL pipeline to update Apache Jena Fuseki instance">
+            <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+              LinkedPipes ETL pipeline to update Apache Jena Fuseki instance
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              Finally, a pipeline is executed, loading the stored RDF dump of the STIRData compliant files and creating an Apache Jena TDB2 database, which is then published as a SPARQL endpoint using Apache Jena Fuseki.
+              At the end of the pipeline, Fuseki is restarted to load the freshly created database.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h5 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            Technical features of LinkedPipes ETL
+          </h5>
+          <p class="mbr-text mbr-fonts-style display-7">
+            <a href="https://etl.linkedpipes.com/">LinkedPipes ETL</a> is a Java-based open-source tool, which contains a <a href="https://etl.linkedpipes.com/components/">library of reusable and configurable components</a>.
+            These components are used to construct the data transformation pipelines. 
+            The input components include components for processing RDF, such as loading RDF dumps and querying SPARQL endpoints, CSV via transforming it to RDF, JSON via adding a JSON-LD context and loading it as RDF and XML via the XSLT transformation component.
+            The transformation components are mainly based on SPARQL.
+            The output components include saving the data in RDF dumps of different serialisations supported by the used Eclipse rdf4j library, CSV files via SPARQL SELECT queries, JSON files via JSON-LD or the <a href="https://etl.linkedpipes.com/components/t-mustache">Mustache</a> generic text templating component.
+            In cases where the data is too big to fit into memory at once, LinkedPipes ETL also supports chunked data processing.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            To sum up, LinkedPipes ETL can be used to process and transform the business registry source data in JSON, XML, CSV and RDF published in APIs and SPARQL endpoints, and should be universally applicable in most scenarios.
+            Even if a component would be missing from its library, e.g. for a particular data source or SPARQL endpoint implementation, it can be added, as the tool is open-source.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h5 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            Installing and running LinkedPipes ETL, required expertise
+          </h5>
+          <p class="mbr-text mbr-fonts-style display-7">
+            LinkedPipes ETL can be <a href="https://etl.linkedpipes.com/installation/">deployed</a> on any system via Docker, or natively on a system running JDK 17 and Node.js 17. Its graphical user interface is a web application, which is used by pipeline designers to create, run and manage individual pipelines.
+            The pipelines themselves are JSON-LD files, which can be moved among individual LP-ETL instances, e.g. between debugging and production environments, versioned in GitHub, published on the Web, etc.
+            The users of LinkedPipes ETL are expected to know RDF and SPARQL.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            <strong>D2RML</strong>
+          </h4>
+          <p class="mbr-text mbr-fonts-style display-7">
+            <a href="http://apps.islab.ntua.gr/d2rml">D2RML</a> is a language for defining data complete mapping workflows that acquire data from one or more information sources (e.g. local files, HTTP APIs, relational database systems, SPARQL endpoints), interpret them based on their structure (e.g as relational tables, XML documents, JSON documents, plain text), split them into semantically meaningful elements (e.g. relation table rows, XML elements, JSON objects, RDF triples, regular expression matches), and iterate over those elements applying at the same time mapping rules that generate the RDF triples.
+            Apart from generating RDF datasets, a D2RML document may also include mapping rules to generate plain text files; this might be useful for generating e.g. SPARQL update statements for updating RDF datasets loaded in a triple store.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            A D2RML specification comes in the form of a D2RML document, which is written in Turtle syntax and contains the full specification of one or more data mapping workflows, from data acquisition to data generation.
+            A D2RML document is processed by a D2RML processor, which is thus responsible for interpreting the specification, retrieving the data from the sources, performing the prescribed data manipulation, and producing the final RDF datasets in some RDF serialisation as well as any plain text output. 
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            The core mechanism for generating RDF triples in D2RML are maps, which are rules for generating RDF terms (subjects, predicate, objects, named graphs) from the data elements obtained from the sources, and for appropriately combining those terms into RDF triples.
+            To generate the appropriate RDF terms and triples, the mapping rules may apply data processing functions on the original data, as well as perform conditional mapping using case and conditional statements.
+            They can also prescribe that the original data should parametrically be expanded with additional relevant data obtained from other sources so that the mapping is eventually performed over the expanded data.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h5 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            D2RML Processor
+          </h5>
+          <p class="mbr-text mbr-fonts-style display-7">
+            D2RML is a mapping workflow specification language, and D2RML documents are executed by a D2RML processor implementing the specification.
+            A D2RML processor implementation, developed in Java, is currently available as a REST API and can also be downloaded and used as a command-line tool.
+            The user should provide to the D2RML processor a D2RML document and upon completion of the execution get the generated RDF and other files.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h5 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            SAGE
+          </h5>
+          <p class="mbr-text mbr-fonts-style display-7">
+            Built on top of the D2RML processor, SAGE is a tool that facilitates the management of RDF datasets produced by D2RML documents, offering at the same time several additional functionalities.
+            In particular, it allows a user to create one or more datasets to be populated by RDF triples generated by one or more D2RML documents, monitor the execution of such documents, publish the resulting datasets in one or more triple stores, unpublish them, create searchable indexes from the generated data, perform automatic annotation of the generated content e.g. by applying NERD tools that link the data to a third party or custom vocabularies (e.g. SKOS vocabularies, Wikidata), and manually validate the annotations. 
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            SAGE is a web-based tool that works with per-project instances that allocate the necessary resources.
+            Currently supported triple stores are OpenLink Virtuoso and Blazegraph.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h5 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            Showcase
+          </h5>
+          <p class="mbr-text mbr-fonts-style display-7">
+            An example of a D2RML document that has been used to transform data from the Norwegian legal entities open dataset provided by the <a href="https://www.brreg.no/en/">Norwegian business register</a> (BREGG) to an RDF dataset according to the <a href="https://stirdata.github.io/data-specification/">STIRData specification</a> can be found <a href="https://stirdata-semantic.ails.ece.ntua.gr/api/content/no/mapping/2635b100-7f4b-44ca-bcd6-93854ceb644c">here</a>.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            After defining the necessary namespaces, the document contains the definitions of the information sources from which data will be obtained.
+            These are the BREGG API from which the entire business dataset is obtained in JSON format, as well as two external REST APIs that map country names to ISO 3166 country codes, and European postcodes to NUTS and LAU codes.
+            The main part of the D2RML document that follows provides the actual rules for generating the desired RDF triples.
+            It starts by specifying how the business dataset will be split into individual company JSON elements, and then it specifies that some data processing functions should be applied on parts of the elements, and parameterized calls to the external APIs should be performed to get the respective ISO 3166 country, NUTS and LAU codes.
+            Then, the definitions of the maps that generate the actual triples for each individual company follow, namely of a subject map that will generate the IRI identifying each company in the dataset, and of several predicate-object maps that generate the desired RDF triples predicate and objects.
+            These include maps for generating triples linking each company to its name, to its legal form and business activities and expressed as SKOS concepts, to its registration identifier, to its address, etc.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image1 cid-sptnMrVVWa" id="image1-24">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/sage-no.webp" alt="Norwegian business registry processing in SAGE">
+            <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+              Norwegian business registry processing in SAGE
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              The D2RML document can be executed either by the command line D2RML processor or through SAGE.
+              The following figure shows the dataset management interface of the STIRData SAGE instance.
+              On the left, there is the list of datasets, and on the right the details of the currently selected dataset, in this case of the Norwegian business register dataset, which involves three D2RML documents, one to generate some dataset metadata and two to generate the actual data (one for mapping the main business unit data, the document discussed above, and one more for the business subunit data). 
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image2 cid-sptnP1ZSPe" id="image2-25">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/sage-pc.webp" alt="SPARQL CONSTRUCT query in LinkedPipes ETL">
+            <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
+              Inferred schema and statistics in SAGE
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              After executing and publishing the dataset, an inferred schema and statistics about the data are provided (see figure), through which the user can have an overview of the generated content, check for errors and perform other tasks like annotation and indexing. 
+            </p>
+            <p class="mbr-text mbr-fonts-style display-7">
+              As an example, the D2RML document discussed above transformed <a href="https://data.brreg.no/enhetsregisteret/api/enheter/988920738">this company data</a> as obtained from BRREG to <a href="https://stirdata-semantic.ails.ece.ntua.gr/api/content/no/view?uri=https://lod.stirdata.eu/data/organization/no/988920738">this RDF data</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h5 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            Evaluation
+          </h5>
+          <p class="mbr-text mbr-fonts-style display-7">
+            D2RML and the D2RML processor/SAGE have been tested on business registry open data from 10 European countries (Belgium, Cyprus, Greece, Estonia, Finland, France, Latvia, Norway, Romania, United Kingdom).
+            In particular, D2RML mappings have been defined for converting the publicly available business registry data for these countries from their original format to RDF datasets conforming to the STIRData specification.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            D2RML mappings have also been defined to generate SKOS versions of the NACE Rev 2 classification, of several local extensions thereof (Nace-Bel 2008, TOL 2008, UK SIC 2007, Norwegian SIC 2007, KAΔ 2008) as well as SKOS versions of the NUTS 2021 and LAU 2021 classifications, including also geospatial data, to which the business data were linked.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            These mappings required obtaining data from different sources (national business registries, national open data portals, Eurostat, GISCO) in different ways (direct HTTP download, download upon sign in, download of plain files and compressed files), working on several file formats (CSV, Excel, JSON, XML) and using additional, external REST APIs to enrich original business data based on the address information.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            The expressivity of D2RML was sufficient to cover the data transformation needs posed by all the above datasets, without the need for externally obtaining and preprocessing the data.
+            Complex data transformation needs that are well beyond the scope of a data mapping language, such as resolving country names to ISO 3166 country codes using fuzzy matching, and mapping postcodes to NUTS and LAU regions using information obtained from GIS data were covered within D2RML by calls to external APIs.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            Finally, the implementation of the D2RML processor was scalable, and was able to process millions of business register entries, and produce hundreds of thousands of RDF triples per dataset (e.g. about 5 million entries and 140 million triples for the UK Companies House dataset).
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            The main difficulty in using D2RML is that the user should learn the language in order to be able to express the desired data mapping workflows.
+            The <a href="http://apps.islab.ntua.gr/d2rml/tr/d2rml">D2RML specification</a> document provides a detailed discussion of the language.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-5">
+            The alternatives
+          </h3>
+          <p class="mbr-text mbr-fonts-style display-7">
+            The tools used in our project, LinkedPipes ETL and D2RML, are far from the only ones that can be used to publish data compliant with the STIRData specification.
+            In this section, we point to other tools that can be used to configure the necessary semantic enrichment, even though we did not actually implement the transformation processes in them.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            An additional category of tools that can be potentially used to publish the data are Virtual knowledge graph endpoints (virtual endpoints).
+            They provide users with access to the underlying data without the need to run any transformation ahead of time. Instead, a virtual endpoint fetches and transforms data online.
+            As a result, it provides a consistent view of the underlying data source.
+            The cornerstone of this approach is the leverage of mapping between the source and target data format.
+            This mapping is often provided by an administrator or domain expert.
+            The mapping is similar to the one used by D2RML.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            <strong>Ontop</strong>
+          </h4>
+          <p class="mbr-text mbr-fonts-style display-7">
+            <a href="https://github.com/ontop/ontop">Ontop</a> is an implementation of a virtual knowledge graph endpoint.
+            As such it can expose data from a supported relational database as SPARQL endpoint.
+            The mapping language of choice is <a href="https://www.w3.org/TR/r2rml/">R2RML</a>, a W3C Recommendation.
+            As the design of the mapping can be a significant entry barrier for new users, <a href="https://ontop-vkg.org/tutorial/basic/setup.html#ontop-protege-setup">Ontop provides integration</a> with <a href="https://protege.stanford.edu/">Protégé</a>, an open-source ontology editor and knowledge management system.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            Once the mapping is ready Ontop can be deployed as a Java application or using Docker.
+            In addition to the SPARQL endpoint Ontop also allows export as an RDF dump.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            <strong>CSV on the Web &amp; RDF::Tabular</strong>
+          </h4>
+          <p class="mbr-text mbr-fonts-style display-7">
+            When it comes to the publication of relational data on the internet, there is no need to reinvent the wheel.
+            The W3C already published the <a href="https://www.w3.org/TR/tabular-data-primer/">CSV on the Web (CSVW) Recommendation</a>.
+            This standard specifies how a metadata descriptor can be attached to a CSV file.
+            In addition, the standard also describes the transformation of a file with metadata into RDF.
+            With that, the path from CSV to RDF is almost complete.
+            A last missing piece is software capable of running the transformation.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            <a href="https://github.com/ruby-rdf/rdf-tabular">RDF tabular</a> is capable of consuming CSV with the right metadata and is able to produce RDF or JSON output.
+            Written in Ruby, the application can be installed using RubyGem on execution from the command line.
+            Unfortunately, the application does not provide any support for the design of the metadata descriptor according to the CSVW standard.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image1 cid-sptnMrVVWa" id="image1-24">
+    <div class="container">
+      <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+        <strong>rml.io</strong>
+      </h4>
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/rmleditor.webp" alt="RMLEditor screenshot">
+            <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+              Screenshot of RMLEditor
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              A family of tools focused on converting data into RDF dumps or loading it into a SPARQL endpoint is being actively developed as a part of the rml.io toolset.
+              Its basic functionality is similar to D2RML.
+              The main idea is to employ RML, a relational to RDF mapping language, to convert data like XML, TSV, JSON, Excel files and LibreOffice files to RDF dumps or upload them directly into the SPARQL endpoint.
+            </p>
+            <p class="mbr-text mbr-fonts-style display-7">
+              In the centre of the toolset stand two transformers, RMLMapper and RMLStreamer.
+              Both are Java applications.
+              The main difference is that RMLMapper, also available as a Docker image, loads all the data in memory and is thus not suitable for larger data.
+              On the contrary, RMLStreamer does not only, as the name suggests, support streaming but also is capable of running on an Apache Flink cluster.
+            </p>
+          </div>
+        </div>
+      </div>
+      <p class="mbr-text mbr-fonts-style display-7">
+        In addition, an RMLEditor allows users to use a graphical interface to design the transformation and thus significantly decrease the entry barrier for new users.
+        An alternative is to employ Matey, an online editor for YARRRML - a human-friendly text-based representation of RML rules.
+        To further lower the entry barrier there are tutorials for basic transformation into RDF from XML, TSV and JSON.
+      </p>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            <strong>Apache NiFi</strong>
+          </h4>
+          <p class="mbr-text mbr-fonts-style display-7">
+            With Apache NiFi (NiFi) users can run complex data distribution and processing pipelines - directed graphs of data routing, transformation, and system mediation logic.
+            NiFi focuses on performance and reliability.
+            The pipelines consist of components and can be designed using a web interface.
+            Using the same interface, the user can execute and monitor the performance.
+            The functionality is defined by the available plugins, called processors.
+            While there is support for CSV and JSON, there is no default support for transformation into RDF.
+            That being said, this support can be added by third-party-developed Java plugins.
+            An alternative is to employ JSON-based transformations and produce JSON-LD files.
+            The main strength of NiFi lies in the ability to scale and monitor.
+            As such it is a great tool for transforming large amounts of small to medium size files in a reliable way.
+            Although NiFi may be overkill for the periodic transformation of data into RDF, its specifics can make it a tool of choice in specific scenarios.
+            NiFi is distributed both as a Java application and using Docker.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image2 cid-sptnP1ZSPe" id="image2-25">
+    <div class="container">
+      <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+        <strong>OpenRefine</strong>
+      </h4>
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-5">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/openrefine.webp" alt="OpenRefine">
+            <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
+              Screenshot of OpenRefine
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              OpenRefine is available as a Java application and using Docker.
+              The main focus is on dealing with low-quality data and improving the quality by data cleaning, format transformation and data integration.
+              OpenRefine is designed to closely collaborate with a user via a web-based graphical interface.
+              Users can import data from a database or file in various formats: CSV, XML, JSON, ODS, XLS, XLSX.
+              Once a user selects the source file to import, a new project is created.
+              A project holds the data and allows the user to perform transformations.
+              This may include operations like changing text to lowercase, splitting a column or reconciliation.
+              Once a user is satisfied with the data they can export data for example as CSV or a custom JSON file.
+              By default, OpenRefine does not allow users to export data as RDF.
+              Although we can export data as JSON-LD using the JSON export templating mechanism, a better solution might be to use an alternative distribution of OpenRefine.
+              OntoRefine provides integration with GraphDB and allows export to RDF.
+              An alternative is to add the RDF extension to OpenRefine.
+              All together the focus of OpenRefine is clearly on close collaboration with a user rather than automatic data transformation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h2 class="mbr-section-title mbr-fonts-style align-center mb-4 display-6">
+            <strong>Publishing the data</strong>
+          </h2>
+          <p class="mbr-text mbr-fonts-style display-7">
+            Once the data is ready and compliant with the STIRData specification, it needs to be published.
+            Currently, the STIRData platform requires the data to be published in a SPARQL endpoint.
+            This is necessary so that the platform and other applications can query the data.
+            However, the data should also be published as an RDF dump so that anyone can populate their own SPARQL endpoint or process the data in their own way.
+            The case where only the RDF dump and not the SPARQL endpoint is available can be solved by loading the dump into a SPARQL endpoint hosted by the user and registering it manually in the STIRData platform.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-5">
+            The tools used in the project
+          </h3>
+          <p class="mbr-text mbr-fonts-style display-7">
+            Here we describe the SPARQL endpoint implementations we use in the project and some of their known alternatives.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            <strong>Apache Jena Fuseki</strong>
+          </h4>
+          <p class="mbr-text mbr-fonts-style display-7">
+            <a href="https://jena.apache.org/documentation/fuseki2/">Apache Jena Fuseki</a> is an open-source, Java-based native SPARQL endpoint implementation using the <a href="https://jena.apache.org/">Apache Jena</a> RDF stack.
+            It can run in Docker, or in a system running JDK 11 and newer.
+            In STIRData, it serves the Czech Business Registry.
+            It is easy to deploy and work with.
+            One pitfall is that it does not support update operations very well - it does not free up disk space and it only grows.
+            Therefore, for regularly updated data it is advisable to always generate a fresh copy of the database and switch to it, instead of trying to update an existing database e.g. using SPARQL Update.
+            This is what we do in the LinkedPipes ETL pipeline.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            <strong>OpenLink Virtuoso Open-Source</strong>
+          </h4>
+          <p class="mbr-text mbr-fonts-style display-7">
+            <a href="https://github.com/openlink/virtuoso-opensource/commits/develop/7">OpenLink Virtuoso Open-Source</a> is written in multiple programming languages and is a well-known member of the SPARQL endpoint implementation landscape.
+            It stores the data in a relational database natively and provides a SPARQL endpoint wrapper.
+            It is fast and memory-efficient.
+            It is, however, known for being buggy and a bit difficult to configure and host.
+            It can run in Docker and natively in almost any common operating system.
+            In STIRData, it is used e.g. for the Greek and Norwegian business registries.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-5">
+            The alternatives
+          </h3>
+          <p class="mbr-text mbr-fonts-style display-7">
+            Here we list a couple of alternatives to the mentioned SPARQL endpoint implementations, which we are familiar with.
+            For additional alternatives see e.g. this <a href="https://en.wikipedia.org/wiki/List_of_SPARQL_implementations">Wikipedia article</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            <strong>Eclipse rdf4j</strong>
+          </h4>
+          <p class="mbr-text mbr-fonts-style display-7">
+            <a href="https://rdf4j.org/">Eclipse rdf4j</a> is another open-source Java-based native SPARQL endpoint implementation, this time using the Eclipse rdf4j RDF stack.
+            The provided functionality is very similar to Apache Jena Fuseki.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            <strong>Amazon Neptune &amp; Blazegraph</strong>
+          </h4>
+          <p class="mbr-text mbr-fonts-style display-7">
+            <a href="https://blazegraph.com/">Blazegraph</a> was also an open-source Java-based native SPARQL endpoint implementation.
+            However, it is no longer developed since the acquisition by Amazon and transformation into Amazon Neptune, which is now a commercial, cloud-based SPARQL endpoint.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="mbr-section-title mbr-fonts-style align-center mb-4 display-7">
+            <strong>OntoText GraphDB</strong>
+          </h4>
+          <p class="mbr-text mbr-fonts-style display-7">
+            <a href="https://www.ontotext.com/products/graphdb/">OntoText GraphDB</a> is a commercial Java-based native SPARQL endpoint implementation.
+            Its Free version is currently limited to 2 parallel query executions at a time.
+            Otherwise, it is also a viable alternative.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h2 class="mbr-section-title mbr-fonts-style align-center mb-4 display-6">
+            <strong>Usage of the published data in the STIRData platform</strong>
+          </h2>
+          <p class="mbr-text mbr-fonts-style display-7">
+            The STIRData platform allows searching, navigating, synthetically analysing, and visualising company-related open data content coming from different sources in a homogeneous way, supporting a number of cross-border and cross-domain reuse scenarios.
+            These sources will include company registries, sources discoverable via the European Data Portal (EDP) and other open data platforms.
+            The offered functionalities will be exposed via an open Application Programming Interface (API) so that they can be reused by other digital public services or applications developed by data and ICT companies.
+            In particular, during the project lifetime, data referring to at least 1.5 million companies from at least five different countries will be published as Linked Data and become searchable and navigable via the STIRData platform.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image1 cid-sptnMrVVWa" id="image1-24">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-7">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/stirdata-statistics-overview.webp" alt="STIRData platform statistics overview">
+            <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+              STIRData platform statistics overview
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              The platform provides 2 main functionalities: high-level statistics regarding the regions and activity codes, and the ability to perform complex queries upon the published data of the participating countries.
+              All the harmonised company-related data and search results will be presented and visualised in a user-friendly way.
+            </p>
+            <p class="mbr-text mbr-fonts-style display-7">
+              In the image you can see the statistics overview page.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image2 cid-sptnP1ZSPe" id="image2-25">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-8">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/stirdata-statistics-pages.webp" alt="Region-statistics page and an activity-statistics page">
+            <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
+              Region-statistics page and an activity-statistics page
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              Next, we have examples of a region-statistics page and an activity-statistics page.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="image1 cid-sptnMrVVWa" id="image1-24">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-7">
+          <div class="image-wrapper">
+            <img src="../assets/images/internal-tools-evaluation-and-testing/stirdata-search.webp" alt="STIRData platform custom queries">
+            <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+              STIRData platform custom queries
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg">
+          <div class="text-wrapper">
+            <p class="mbr-text mbr-fonts-style display-7">
+              Finally, we can see below an example of the explore page, where a platform user can execute custom-tailored search queries.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-5">
+            Technical challenges
+          </h3>
+          <p class="mbr-text mbr-fonts-style display-7">
+            As mentioned above, the STIRData platform adopts a decentralised approach and is developed on the assumption that the data from the several business registries are in RDF format compliant to the STIRData data model, and reside in several SPARQL endpoints, one for each business registry, that may be periodically updated.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            The decentralised approach offers the significant benefits of openness and flexibility in terms of the supported business registries since it assures that keeping the business registry data up-to-date and adding or removing support for business registries are completely independent processes from the search and navigating functionalities offered by the platform.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            However, it is that the STIRData platform cannot maintain its own datastore with all the data and that it essentially acts as a mediator between the user, who formulates queries and asks statistics and other information, and the several SPARQL endpoints that contain the actual business registry data.
+            Its main task is to get a user request, translate it into appropriate SPARQL queries addressed to the appropriate SPARQL endpoints, collect the results and present them in a visual manner.
+            The lack of a central data store and the periodical updating of the data limits the possibilities of using performance-enhancing techniques, such as data indexing at the platform level.
+            In general, the efficiency of answering a user query relies to a big extent on the efficiency of each SPARQL endpoint and of the communication of the platform with them.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            A significant aspect of the query answering process is, however, that there is no need for interaction between distinct business registry SPARQL endpoints, i.e. in general there is no need to join data from different endpoints since each endpoint offers data from a specific business registry that does not link to other business registry data.
+            This significantly alleviates the efficiency issues posed by the decentralised mode.
+            The only aspect of the data that link to external resources is their enrichments regarding their business location and activities, which are encoded using common, external SKOS vocabularies.
+            Given that these vocabularies are in general fixed, rarely updated, and relatively limited in size, the STIRData platform maintains a copy of that vocabularies to allow for more efficient query processing, and formulate the queries in such a way that each business registry be able to answer them without needing to consult extraneous SPARQL endpoints.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            Nevertheless, because a key functionality of the platform is offering statistics about business registries (based on the location, business activity, etc.) and, despite the above, computing them may involve multiple time-consuming queries resulting in an unacceptable long overall response time, the STIRData platform maintains a central data store that keeps precomputed statistics.
+            The purpose is that those statistics be computed in advance when a business registry is added or its data are updated and be readily available for user queries.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF" id="content5-23">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12">
+          <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-5">
+            Implementation choices and evaluation
+          </h3>
+          <p class="mbr-text mbr-fonts-style display-7">
+            The backend of the STIRData platform is being developed along the above lines in Spring Boot, using Apache Jena for communicating with the SPARQL endpoints, and a relational database (PostgreSQL) for maintaining the precomputed statistics.
+            Since the business registry SPARQL endpoints are external and may be backed by different triplestore systems, no assumption is made about any entailment regime they may offer.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            Given the lack of a centralised store and of any entailment, a significant choice that had to be made regards the way queries for obtaining businesses residing in a particular region or having a particular business activity.
+            The STIRData business model requires that business registry data are enriched only with the most specific relevant location and activity SKOS concepts (and not the full upward hierarchy), but queries about a location or a business activity should consider the business in the entire downward hierarchy from a given top location or activity.
+            For implementing such queries involving SKOS concepts two options are available a) using SPARQL path expressions possibly with using SPARQL SERVICE construct, and b) using the SPARQL VALUES construct to encode all desired sub-locations or sub-activities in a query.
+            It turned out that the most efficient and cross triplestore applicable option was the second one, and it was adopted by the STIRData platform for formulating all relevant SPARQL queries.
+            Still, depending on the complexity of a query it may take a reasonable amount of time to get a response.
+          </p>
+          <p class="mbr-text mbr-fonts-style display-7">
+            Regarding statistics, they are computed individually per location, per activity, and per time period.
+            It turns out that individually computing these statistics is feasible within a reasonable time even for the largest business registries (e.g. for UK Business Companies House containing about 5 million entries).
+            Because of the above comment, the queries for obtaining a statistic about a location or business activity are far from trivial since they must explicitly encode the entire hierarchy of sub-locations or sub-activities given a top location or activity.
+            Computing joint statistics (e.g. per location and per activity) is a much more challenging task firstly because of the size of the results (e.g. NACE Rev2 involves 996 activities and Czechia has 6258 NUTS and LAU regions), and secondly because of the complexity of the resulting queries.
+            The efficiency of answering such queries depend highly on the underlying triplestore system, and (possibly hybrid) approaches to make their computation more efficient are still under investigation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer-component></footer-component>
+
+  <!-- <section style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: none;">
+    <a href="https://mobirise.site/j" style="flex: 1 1; height: 3rem; padding-left: 1rem;"></a>
+    <p style="flex: 0 0 auto; margin:0; padding-right:1rem;">
+      Mobirise free creator - <a href="https://mobirise.site/o" style="color:#aaa;">Find more</a>
+    </p>
+  </section>
+  <script src="../assets/web/assets/jquery/jquery.min.js"></script>
+  <script src="../assets/popper/popper.min.js"></script>
+  <script src="../assets/tether/tether.min.js"></script>
+  <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../assets/smoothscroll/smooth-scroll.js"></script>
+  <script src="../assets/dropdown/js/nav-dropdown.js"></script>
+  <script src="../assets/dropdown/js/navbar-dropdown.js"></script>
+  <script src="../assets/touchswipe/jquery.touch-swipe.min.js"></script>
+  <script src="../assets/theme/js/script.js"></script> -->
+</body>
+</html>

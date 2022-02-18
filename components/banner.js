@@ -10,9 +10,9 @@ class Banner extends HTMLElement {
         <div class="align-center container">
           <div class="row justify-content-center">
             <div class="col-12 col-lg-12">
-              <h1 class="mbr-section-title mbr-fonts-style mb-3 display-1">
+              <div class="mbr-section-title mbr-fonts-style mb-3 display-1">
                 <strong>STIRData</strong>
-              </h1>
+              </div>
               <p class="mbr-text mbr-fonts-style mb-3 display-5">
                 ${this.getAttribute('sub-title')}
               </p>
