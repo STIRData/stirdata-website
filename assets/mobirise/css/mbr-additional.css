@@ -4309,3 +4309,6 @@ a {
   height: 132px;
   overflow: hidden;
 }
+.item-img img {
+  object-fit: fill;
+}
