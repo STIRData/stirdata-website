@@ -12,11 +12,11 @@ class Card extends HTMLElement {
           </div>
           <div class="item-content mb-4">
             <h5 class="item-title mbr-fonts-style display-5">
-              <a class="text-primary">
+              <a class="text-primary" href=${this.getAttribute('url')}>
                 ${this.getAttribute('title')}
               </a>
             </h5>
-            <h6 class="item-subtitle mbr-fonts-style mt-1 display-7">
+            <h6 class="item-subtitle mbr-fonts-style mt-1 display-7 d-flex justify-content-between">
               <strong>
                 ${this.getAttribute('creator')}
               </strong>

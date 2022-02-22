@@ -3667,8 +3667,8 @@ a {
 .cid-spsRb9KBe0 img,
 .cid-spsRb9KBe0 .item-img {
   height: 100%;
-  height: 300px;
-  object-fit: cover;
+  height: 200px;
+  object-fit: fill;
 }
 .cid-spsRb9KBe0 .item:focus,
 .cid-spsRb9KBe0 span:focus {
@@ -3714,6 +3714,11 @@ a {
 }
 .cid-spsRb9KBe0 .item-title {
   text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: 16px;
+  font-size: 1.8rem;
 }
 .cid-spsRb9KBe0 .item-subtitle {
   text-align: left;
@@ -4308,7 +4313,4 @@ a {
   width: 100%;
   height: 132px;
   overflow: hidden;
-}
-.item-img img {
-  object-fit: fill;
 }
