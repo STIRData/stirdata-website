@@ -3668,7 +3668,7 @@ a {
 .cid-spsRb9KBe0 .item-img {
   height: 100%;
   height: 200px;
-  object-fit: fill;
+  object-fit: contain;
 }
 .cid-spsRb9KBe0 .item:focus,
 .cid-spsRb9KBe0 span:focus {
@@ -4313,4 +4313,67 @@ a {
   width: 100%;
   height: 132px;
   overflow: hidden;
+}
+
+.schedule__head {
+  padding-bottom: 18px;
+  border-bottom: 1px solid;
+  font-size: 34px;
+  letter-spacing: 3.2px;
+  color: #2b3595;
+}
+/* .fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+} */
+.schedule_default .schedule__row {
+  border-bottom: 1px solid rgba(32, 32, 32, 0.15);
+}
+.schedule__row {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 28px 0;
+  border-bottom: 1px solid lightgray;
+  font-size: 24px;
+  line-height: 1.16;
+}
+.schedule__time {
+  padding-right: 30px;
+  -webkit-flex: 0 0 284px;
+  -ms-flex: 0 0 284px;
+  flex: 0 0 284px;
+  font-weight: 400;
+}
+.schedule__wrap {
+  -webkit-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+}
+.schedule__title {
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+.schedule__text {
+  opacity: .7;
+  font-size: 20px;
+  line-height: 1.35;
+}
+.schedule__people {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding-left: 30px;
+  align-items: center;
+}
+.schedule__user {
+  position: relative;
+  width: 55px;
+  height: 55px;
+}
+.schedule__pic {
+  display: block;
+  width: 100%;
+  border-radius: 50%;
+  border: 1px solid #2b3595;
 }
