@@ -11,7 +11,7 @@ class Navbar extends HTMLElement {
             <div class="navbar-brand">
               <span class="navbar-logo">
                 <a href="/">
-                  <img src="/assets/images/platform_logo.png" alt="stirdata_logo" style="height: 4.3rem;">
+                  <img src="/assets/images/platform_logo.png" alt="stirdata_logo" style="height: 2.8rem;">
                 </a>
               </span>
             </div>
