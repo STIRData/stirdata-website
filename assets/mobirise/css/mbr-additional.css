@@ -4377,3 +4377,15 @@ a {
   border-radius: 50%;
   border: 1px solid #2b3595;
 }
+
+.section-title {
+  position: relative;
+  margin-bottom: 1em;
+  padding-top: 0.6em;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 3px;
+  font-size: 13px;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid #E9E6DF;
+}
