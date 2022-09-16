@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Site made with Mobirise Website Builder v5.2.0, https://mobirise.com -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Mobirise v5.2.0, mobirise.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon">
+  <meta name="description" content="">
+  <title>STIRData</title>
+  <link rel="stylesheet" href="../assets/tether/tether.min.css">
+  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-reboot.min.css">
+  <link rel="stylesheet" href="../assets/dropdown/css/style.css">
+  <link rel="stylesheet" href="../assets/socicon/css/styles.css">
+  <link rel="stylesheet" href="../assets/theme/css/style.css">
+  <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
+  <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+  <link rel="stylesheet" href="../assets/custom/css/architecture-report.css">
+  <script src="../components/navbar.js" type="text/javascript" defer></script>
+  <script src="../components/banner.js" type="text/javascript" defer></script>
+  <script src="../components/footer.js" type="text/javascript" defer></script>
+</head>
+
+<body>
+  <navbar-component></navbar-component>
+
+  <banner-component sub-title="Activity 2 - Use cases, datasets analysis, and architecture definition"></banner-component>
+
+  <section class="content4 cid-sptncs5cVA" id="content4-1y">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="title col-md-12 col-lg-12">
+          <h1 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
+            <strong>Technical Architecture</strong>
+          </h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content5 cid-sptnoelfQF pt-0">
+    <div class="container">
+      <h1 class="c8" id="h.il9ov77m29y1"><span>Introduction</span></h1>
+      <p class="c3"><span>T</span><span class="c1">his document describes the technical architecture of the STIRData platform. The key feature of the STIRData platform that has determined its architectural design discussed here is that it must provide
+          unified access, through a single access point, to multiple european business registry datasets, individually published as linked data in a distributed manner, without requiring a central datastore where all data should be copied, and without
+          requiring that all datasets are fully homogenized by providing exactly the same aspects of information regarding legal entities. </span></p>
+      <p class="c3"><span class="c1">The aim is that the STIRData platform is open and flexible, in the sense that new business registry datasets can be dynamically added to or removed from the platform, and that no strict requirements for data
+          completeness are imposed; each functionality provided by the platform should be made available only for the underlying datasets that can support it. The business registry datasets to which the STIRData platform provides access are not part of
+          the STIRData platform; they are considered to be external datasets, maintained and managed by third-party bodies.</span></p>
+      <p class="c3"><span class="c1">The unified access provided by the STIRData platform serves the aim of providing common search and data exploration functionalities over all participating business registry datasets to the end user through the
+          STIRData portal.</span></p>
+      <h1 class="c8" id="h.il9ov77m29y1"><span>Data architecture</span></h1>
+      <p class="c3"><span class="c1">To best serve the above objectives, the technical architecture of the STIRData platforms follows a fully decentralized approach shown in Figure 1. </span></p>
+      <p class="c3"><span class="c1">As illustrated in the figure, the main underlying assumption of the adopted approach is that the several business registries make available (parts of) their data as linked open data, modeled according to the </span><span
+          class="c12"><a class="c11" target="_blank" href="https://stirdata.github.io/data-specification/">STIRData business data model</a></span><span
+          class="c1">, by publishing them in an RDF store (a different, remote triple store for each business registry, not managed by the STIRData platform) that is accessible through a public SPARQL endpoint. The full conformance of the datasets to the
+          STIRData business data model is crucial and is that which makes the datasets understandable to the STIRData platform and enables it to provide its functionalities over them. </span></p>
+      <p class="c3"><span class="c1">In Figure 1, the business registry datasets modeled using the </span><span class="c1">STIRData business data model, which are the ones directly accessed by the STIRData platform, are the datasets labeled with LD-STIR and shown
+          in light green color, while the datasets shown in light blue represent the source data from which the STIRdata datasets will typically be derived. Those could e.g. be non-linked data versions (labeled with non-LD), or linked data versions of
+          the data conforming to some other model different than the STIRData business data model (labeled with LD). </span></p>
+      <p class="c3"><span class="c1">It should be noted that t</span><span class="c1">he transformation of a business registry&#39;s data from its original form to a linked data dataset according to the STIRData business data model, which is essential for its participation in
+          the STIRData platform, is not part of the STIRData platform technical architecture described in this document. The STIRData platform assumes that such transformation has been performed beforehand for the participating business registries. An
+          overview of the necessary tools and processes to publish the data according to that model is available in the </span><span class="c12"><a class="c11"
+            target="_blank" href="https://stirdata.eu/posts/internal-tools-evaluation-and-testing">Internal testing and evaluation of the toolset and
+            platform</a></span><span class="c1">&nbsp;document.</span></p>
+      <p class="c24"><span>&nbsp;</span><span
+          style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 100%; height: 442.90px;"><img alt=""
+            src="../assets/images/technical-architecture/image1.png" style="width: 601.70px; height: 442.90px; margin: auto; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>
+      <p class="c13"><span class="c18">Figure 1: STIRData architecture</span></p>
+      <p class="c3"><span class="c1">Given the above overall architecture, to access a business registry dataset the STIRData platform needs to know only the respective SPARQL endpoint. However, it also needs some descriptive metadata about each dataset to be used
+          by the portal for helping the user identify each dataset.</span></p>
+      <h2 class="c19" id="h.huejhetycx9d"><span class="c10">Registration of datasets - DCAT</span></h2>
+      <p class="c3"><span class="c1">In order for a dataset conforming to the STIRData business data model to be accessible by the STIRData platform, the dataset has to be registered with the STIRData platform. </span></p>
+      <p class="c3"><span class="c1">To keep record of the business registries to which it has access, the STIRData platform maintains locally a database of registered business registries (the STIRData database), which contains all necessary metadata
+          about each business registry. These metadata include information such as the country of origin of the dataset, the last data update date, licensing information, the SPARQL endpoint, as well as information regarding the actual dataset content
+          such as the number of registered companies and the supported dimensions (see below).</span></p>
+      <p class="c3"><span class="c1">A dataset may be registered with the STIRData platform either manually or automatically. Manual registration involves manually adding to the STIRData database an entry with all the required information, a task
+          typically performed by the platform administrator. The preferred way of dataset registration is, however, automatic registration.</span></p>
+      <p class="c3"><span class="c1">Automatic registration relies on the availability of a DCAT specification document about a STIRData business data model compliant dataset. The DCAT specification should provide the necessary dataset metadata, including the
+          access SPARQL endpoint. The additional benefit of registration of a dataset through a DCAT specification is that a dataset can also be automatically discovered, provided that it is published in the </span><span class="c12"><a class="c11"
+            target="_blank" href="https://data.europa.eu/en">Official portal for European data</a></span><span class="c1">. </span></p>
+      <p class="c3"><span class="c1">A sample of a </span><span class="c12"><a class="c11"
+            target="_blank" href="https://stirdata.github.io/data-specification/#recommended-metadata-records-in-data-catalogs">compliant DCAT-AP
+            record</a></span><span class="c1">&nbsp;is provided in STIRData business data model</span><span class="c1">, along with a SPARQL query usable in the </span><span class="c12"><a class="c11"
+            target="_blank" href="https://data.europa.eu/sparql">SPARQL endpoint of the official portal for European data</a></span><span
+          class="c1">&nbsp;to discover compliant datasets. An extract of that record for the Czech business registry dataset providing the SPARQL endpoint is reproduced below.</span></p>
+      <p class="c6"><span class="c2">&lt;https://lkod.mff.cuni.cz/zdroj/datov&eacute;-sady/STIRData/obchodn&iacute;-rejst&#345;&iacute;k-stirdata&gt;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; a &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dcat:Dataset ;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; dcterms:conformsTo &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&lt;https://stirdata.github.io/data-specification/&gt; ;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; dcterms:title &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &quot;Business register according to the STIRData data model&quot;@en ;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; dcat:distribution &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;https://lkod.mff.cuni.cz/zdroj/datov&eacute;-sady/STIRData/obchodn&iacute;-rejst&#345;&iacute;k-stirdata/distribuce/sparql&gt;
+          ;</span></p>
+      <p class="c6"><span class="c2">&nbsp;</span></p>
+      <p class="c6"><span class="c2">&lt;https://lkod.mff.cuni.cz/zdroj/datov&eacute;-sady/STIRData/obchodn&iacute;-rejst&#345;&iacute;k-stirdata/distribuce/sparql/p&#345;&iacute;stupov&eacute;-slu&#382;by/sparql&gt;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; a &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dcat:DataService ;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; dcterms:conformsTo &nbsp; &nbsp; &nbsp; &nbsp;sparql: ;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; dcterms:title &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &quot;SPARQL endpoint&quot;@en ;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; dcat:endpointURL &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&lt;https://obchodn&iacute;-rejst&#345;&iacute;k.stirdata.opendata.cz/sparql&gt; ;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; dcat:servesDataset &nbsp; &nbsp; &nbsp; &nbsp;&lt;https://lkod.mff.cuni.cz/zdroj/datov&eacute;-sady/STIRData/obchodn&iacute;-rejst&#345;&iacute;k-stirdata&gt; .</span></p>
+      <p class="c6 c14"><span class="c2"></span></p>
+      <p class="c3"><span class="c1">It should be noted that although the SPARQL endpoint is the main and absolutely essential information about a dataset that should be provided by a DCAT-AP record of a conforming dataset, as mentioned above, there are
+          other metadata regarding the dataset that are needed for its successful integration with the STIRData platform. Given that several of those metadata are not covered by DCAT-AP or the respective national profiles (e.g. name of originating
+          country, last update date), they should be provided by the dataset itself, as prescribed by the relevant STIRData business data model extension.</span></p>
+      <p class="c3"><span class="c1">To automatically discover new datasets, t</span><span class="c1">he STIRData platform is designed to run periodically a task that checks the official portal for European data for new STIRData business model compliant datasets.
+          If a new dataset that is currently not registered with the platform is identified, it generates the necessary database entry by analyzing the respective DCAT specification and the contents of the underlying dataset.</span></p>
+      <h2 class="c4" id="h.d2yo6gim3n46"><span class="c10">Dataset Dimensions</span></h2>
+      <p class="c3"><span class="c1">As mentioned above, each business registry dataset accessible through the STIRData platform must be a set of legal entity descriptions modeled using the </span><span class="c12"><a class="c11"
+            target="_blank" href="https://stirdata.github.io/data-specification/">STIRData business data model</a></span><span class="c1">. </span></p>
+      <p class="c3"><span class="c1">According to that model, a legal entity description is expected to include several properties such as legal name, foundation date, dissolution date, registered address, business activity, company type, company status etc. For
+          the STIRData platform, each one of the above properties defines an information dimension; however no requirement is imposed that a dataset provides all dimensions; each dataset is free to provide any number of dimensions. A more detailed
+          discussion of the dimensions is provided in the </span><span class="c12"><a class="c11"
+            target="_blank" href="https://stirdata.eu/posts/use-cases-and-dataset-analysis">Use cases and dataset analysis</a></span><span
+          class="c1">&nbsp;document.</span></p>
+      <p class="c3"><span class="c1">Figure 2 shows a typical legal entity data modeled using the STIRData business data model (from the Norwegian business registry, BRREG). The particular extract provides information regarding the legal name, the
+          business activity, the company type, the legal identifier, the registered address as well as the founding date.</span></p>
+      <p class="c5"><span class="c2">&lt;http://no.data.stirdata.eu/resource/organization/919967412&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/legal#LegalEntity&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/legal#companyActivity&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://no.data.stirdata.eu/resource/nace/sic2007-no/item/69.100&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/legal#companyType&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://no.data.stirdata.eu/resource/companyType/item/AS&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/legal#legalIdentifier&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://no.data.stirdata.eu/resource/identifier/brreg/919967412&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/legal#legalName&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;ADVOKATOSLO.NO AS&quot;@no ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/legal#registeredAddress&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://no.data.stirdata.eu/resource/address/919967412/b&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;https://schema.org/foundingDate&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;2017-10-16&quot;^^&lt;http://www.w3.org/2001/XMLSchema#date&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;https://schema.org/sameAs&gt; &nbsp;</span></p>
+      <p class="c5"><span class="c2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;https://data.brreg.no/enhetsregisteret/oppslag/enheter/919967412&gt; .</span></p>
+      <p class="c5 c14"><span class="c2"></span></p>
+      <p class="c5"><span class="c2">&lt;http://no.data.stirdata.eu/resource/identifier/brreg/919967412&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/adms#Identifier&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://purl.org/dc/terms/creator&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://no.data.stirdata.eu/resource/agency/brreg&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://purl.org/dc/terms/issued&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;2017-11-24&quot;^^&lt;http://www.w3.org/2001/XMLSchema#date&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/2004/02/skos/core#notation&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;919967412&quot; .</span></p>
+      <p class="c5 c14"><span class="c2"></span></p>
+      <p class="c5"><span class="c2">&lt;http://no.data.stirdata.eu/resource/address/919967412/b&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/locn#Address&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://data.europa.eu/m8g/adminUnit&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;https://w3id.org/stirdata/resource/lau/item/NO_0301&gt; , </span></p>
+      <p class="c5 c28"><span class="c2">&lt;http://publications.europa.eu/resource/authority/country/NOR&gt; , </span></p>
+      <p class="c5 c25"><span class="c2">&lt;https://w3id.org/stirdata/resource/nuts/item/NO081&gt; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/locn#adminUnitL1&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;NO&quot; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/locn#adminUnitL2&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;OSLO&quot; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/locn#fullAddress&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Hegdehaugsveien 34, 0352 OSLO, Norge&quot;@no ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/locn#locatorDesignator&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;34&quot; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/locn#postCode&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;0352&quot; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/locn#postName&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;OSLO&quot; ;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/ns/locn#thoroughfare&gt;</span></p>
+      <p class="c5"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Hegdehaugsveien&quot; .</span></p>
+      <p class="c5 c14"><span class="c2"></span></p>
+      <p class="c13"><span class="c20">Figure 2: Example legal entity data modeled using the STIRData business data model.</span></p>
+      <p class="c3"><span class="c1">A significant distinction regarding the values of dimensions, arising also from the linked data (RDF) nature of the data, is that their values may be either simple, literal data values (e.g. a string for the legal
+          name, a date for the foundation date), complex values (e.g. an entity with the several properties of a registered address) or IRIs representing controlled vocabulary terms (e.g. the business activity). Complex values (such as an address), may
+          themselves be described in terms of other properties which can be literal values or vocabulary terms. The STIRData business data model prescribes that the values of business activity, company type and company status properties should be terms
+          of appropriate SKOS vocabularies. SKOS vocabulary terms should also be the values of the administrative units describing an address.</span></p>
+      <p class="c3"><span class="c1">The above distinction of value types is important because it establishes qualitatively different dimensions, on which different operations may be offered regarding the search and explore functionalities by the STIRData platform.
+          In particular, for the STIRData platform a dimension may be </span><span class="c22">informative</span><span>, </span><span class="c22">searchable </span><span>or </span><span class="c22">browsable</span><span class="c1">.</span></p>
+      <p class="c3"><span class="c1">Informative dimensions are dimensions that provide some information about a legal entity, which can be included in a document providing the details of a legal entity. Obviously, all dimensions are informative. The
+          STIRData platform displays all informative information when offering a preview of a legal entity. Because of the decentralized nature of the STIRData architecture, no generic search functionalities are provided on only informative dimensions.
+          Since each dataset resides in a different triple store, not managed by the STIRData platform, full search functionalities, e.g. full text search, would require maintaining locally an index of all registered datasets for the respective
+          dimensions, which is undesirable.</span></p>
+      <p class="c3"><span class="c1">Searchable dimensions are dimensions on which generic search can be performed, so as to retrieve all legal entities that exactly match some specific value (or a value within some range if this makes sense) for that
+          dimension. Examples of searchable dimensions are foundation date, business activity and registered address administrative unit. The STIRData platform allows searchable dimensions to &nbsp;be used as filters when exploring business registry
+          data. Given the decentralized approach nature of the STIRData architecture, for a dimension to be searchable, it should be possible that a query on a searchable dimension can be executed by appropriately formulating and issuing a respective
+          query directly to the corresponding SPARQL endpoint.</span></p>
+      <p class="c3"><span class="c1">Browsable dimensions are searchable dimensions whose values are in addition parts of a concept hierarchy, so that browsing of the dimension values through the hierarchy of values is possible. This is mostly useful for
+          providing enhanced user experience. The STIRData platform allows browsable dimensions to be used as filters by moving up or down in the respective hierarchy. The browsability of a dimension is determined by its values being members of a SKOS
+          vocabulary hierarchy. Because, as mentioned above, the STIRData business data model prescribes that the values of business activity, company form, company status and the address administrative unit are SKOS vocabulary terms, these are all
+          browsable dimensions. For the STIRData platform, browsable dimensions in a weaker sense are also foundation and dissolution dates assuming a time intervals hierarchy (e.g. decade, year, quarter, month).</span></p>
+      <h2 class="c4" id="h.2h5yvwd0qf79"><span class="c10">Vocabularies of browsable dimensions </span></h2>
+      <p class="c3"><span class="c1">In order for the STIRData platform to support the browsability of a dimension, it must have access to the definition of the underlying SKOS vocabulary. Given that the definition of a vocabulary is in general not part
+          of the dataset that uses it and is typically published separately, the platform has been designed to account for this most general case. This does not exclude the possibility that a certain dataset may include the definitions of the SKOS
+          vocabularies it uses. In particular, datasets automatically registered through DCAT-AP record discovery should provide as part of the dataset itself all vocabularies that they use and are &nbsp;specific to the particular dataset, since the
+          source of such linked vocabularies cannot be described directly in a DCAT-AP record.</span></p>
+      <p class="c3"><span class="c1">In the following, the browsable dimensions are discussed in brief, because their handling, when it comes to formulating and answering queries involving them, is closely related with the decentralized architecture of
+          the STIRData platform.</span></p>
+      <h3 class="c23" id="h.pvbcasfvluga"><span class="c16">Business Activities</span></h3>
+      <p class="c3"><span class="c1">Business activities are typically registered by business registries using business activities codes that correspond to national extensions of the </span><span class="c12"><a class="c11"
+            target="_blank" href="https://ec.europa.eu/eurostat/web/nace-rev2">NACE Rev. 2 classification</a></span><span class="c1">. NACE Rev. 2
+          classification defines an upper four-level hierarchy of business activities, but each country may publish and use a national extension that refines the NACE Rev. 2 hierarchy by extending it with additional levels. Most national extensions
+          involve an additional fifth level, but there are extensions with up to seven levels. All national extensions share the top four levels of the NACE Rev. 2 hierarchy.</span></p>
+      <p class="c3"><span class="c1">NACE Rev. 2 and NACE national extensions are published the first by Eurostat and the latter by the national statistics offices of each country in several formats (typically XML, CSV or XLSX). At the time of
+          development of the STIRData platform there were no official linked data up-to-date versions of these vocabularies.</span></p>
+      <p class="c3"><span class="c1">To cover the lack of linked data versions of those vocabularies, in the context of STIRData, RDF version for the NACE Rev. 2 and the national extensions for the registered business registries that provide the business
+          activity dimension have been created as SKOS vocabularies. As specified by the STIRData business data model, the national extension vocabularies must define the full business activity concepts hierarchy, but link the top four level concepts to
+          the respective concepts of the NACE Rev. 2 vocabulary, using the skos:exactMatch property.</span></p>
+      <p class="c6"><span class="c2">&lt;https://obchodn&iacute;-rejst&#345;&iacute;k.stirdata.opendata.cz/zdroj/&#269;&iacute;seln&iacute;ky/nace-cz/polo&#382;ky/6820&gt; &nbsp; </span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp;a &nbsp; &nbsp; &nbsp; &lt;https://w3id.org/stirdata/vocabulary/BusinessActivity&gt; , &nbsp;</span></p>
+      <p class="c3"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp;skos:exactMatch &lt;https://w3id.org/stirdata/resource/nace/nace-rev2/item/68.20&gt;</span></p>
+      <p class="c3"><span class="c1">In the above example </span><span class="c9">https://obchodn&iacute;-rejst&#345;&iacute;k.stirdata.opendata.cz/zdroj/&#269;&iacute;seln&iacute;ky/nace-cz/polo&#382;ky/6820 </span><span>is a concept of the Czech NACE national
+          extension (NACE-CZ) and </span><span class="c9">https://w3id.org/stirdata/resource/nace/nace-rev2/item/68.20 is </span><span class="c1">the equivalent concept of the NACE Rev. 2. These links essentially integrate each national extension to the
+          common NACE Rev. 2 vocabulary.</span></p>
+      <p class="c3"><span class="c1">According to the STIRData business data model, each business registry models business activities using the respective NACE national extension vocabulary. Because the individual business registry datasets encode business
+          activities at the level of detail of the respective NACE national extension, t</span><span class="c1">echnically, this approach respects the distributed nature of the datasets, allows each business registry to use the respective national
+          extension SKOS vocabulary in its dataset so as to model the information at the desired level of detail, and at the same time allows for a common view of all business registry datasets through the lens of the top four levels shared by the NACE
+          Rev. 2. </span></p>
+      <p class="c3"><span class="c1">It should also be noted that, in general, not all activities of a NACE national extension may be admissible values as business activities. Typically, business registries allow registration of the business activity at
+          the lowest level of the hierarchy (usually &nbsp;the fifth level), without however that this is always the case.</span></p>
+      <p class="c3"><span class="c1">Because the national extension levels below the fourth are different for each business registry, the STIRData platform supports browsability of the business activity dimension up to the fourth common level. </span>
+      </p>
+      <h3 class="c23" id="h.hyuofqibyyxf"><span class="c16">Address Administrative Units</span></h3>
+      <p class="c3"><span class="c1">Address administrative units allow identification of the location of an address at different levels of detail. The STIRData business data model prescribes that apart from the country, NUTS-3 and LAU administrative
+          units are supported. </span></p>
+      <p class="c3"><span class="c12"><a class="c11"
+            target="_blank" href="https://ec.europa.eu/eurostat/web/nuts/background">NUTS</a></span><span class="c1">&nbsp;(Nomenclature of territorial units for
+          statistics) is a hierarchical system for dividing up the economic territory of the European Union and associated countries. The division has 4 levels (NUTS-0, NUTS-1, NUTS-2 and NUTS-3), where NUTS-0 is the country level. Compatible with NUTS
+          are </span><span class="c12"><a class="c11"
+            target="_blank" href="https://ec.europa.eu/eurostat/web/nuts/local-administrative-units">LAU</a></span><span class="c1">&nbsp;(Local
+          Administrative Units), which define a further subdivision of NUTS-3 regions at a single level. </span></p>
+      <p class="c3"><span class="c1">The NUTS classification is published by Eurostat in several formats (typically XML, CSV or XLSX). The LAU for all countries are published in XLSX format. For both classifications geodata files are also made available.
+          NUTS and LAU classification are subject to change; the latest NUTS version is 2021, while an updated LAU version is published every year. At the time of development of the STIRData platform there was no official linked data up-to-date version
+          of these classifications as SKOS vocabularies. </span></p>
+      <p class="c3"><span class="c1">To cover the lack of linked data versions of those vocabularies, in the context of STIRData, RDF versions of both NUTS and LAU have been created as SKOS vocabularies. As specified by the STIRData business data model,
+          addresses must use concepts of those vocabularies to specify the administrative unit an address is part of. In particular, only NUTS-3 and LAU level units are acceptable. </span></p>
+      <p class="c3"><span class="c1">The existence of a common vocabulary for encoding administrative units for all countries significantly simplifies the distributed handling of queries involving the address dimension by the STIRData platform, since
+          there is no need for each business registry to provide a relevant vocabulary.</span></p>
+      <h3 class="c23" id="h.spj8kkvcmrv0"><span class="c16">Company Types</span></h3>
+      <p class="c3"><span class="c1">Company types (legal forms) depend on the national legislation of each country, and even legal forms with similar naming may have significantly different interpretations among countries. Most countries publish a list
+          of legal forms defined by their legislation in several formats (CSV or XLSX).</span></p>
+      <p class="c3"><span class="c1">As in the case of the previous dimensions, in the context of STIRData, SKOS vocabularies have been defined for each country&#39;s national forms. However, the lack of a common ground for company types differentiates
+          this dimension from the previous ones. Nevertheless, an abstraction that holds in general across countries is the distinction between sole proprietorship (sole trader) legal entities, and other company types. Hence, as a minimal abstraction, in
+          the context of STIRData a generic company types vocabulary has been defined including that single concept; national legal forms vocabularies should link to it using skos:broadMatch.</span></p>
+      <p class="c6"><span class="c2">&lt;http://fi.data.stirdata.eu/resource/companyType/item/YEH&gt;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; a &nbsp; &nbsp; &nbsp; &lt;https://w3id.org/stirdata/vocabulary/CompanyType&gt; , &nbsp; &nbsp; &nbsp; &nbsp; </span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; skos:broadMatch &nbsp; &lt;https://w3id.org/stirdata/resource/companyType/item/SP&gt; ;</span></p>
+      <p class="c6 c14"><span class="c2"></span></p>
+      <p class="c3"><span class="c1">In the above example </span><span class="c9">http://fi.data.stirdata.eu/resource/companyType/item/YEH </span><span>is a Finnish legal form (private trader) and </span><span
+          class="c9">https://w3id.org/stirdata/resource/companyType/item/SP </span><span class="c1">is the STIRData sole proprietorship generic concept.</span></p>
+      <h2 class="c19" id="h.fepa9d7jdwt8"><span class="c10">Registration of vocabularies</span></h2>
+      <p class="c3"><span class="c1">From the above analysis it follows that for a browsable dimension to be functional within the STIRData platform, the platform needs to have access to the definition of the respective vocabulary. For this reason, the
+          STIRData platform keeps in the database of registered business registries the necessary information also for accessing and using the relevant vocabularies.</span></p>
+      <p class="c3"><span class="c1">For the case of the administrative units, the common NUTS/LAU vocabulary is built-in by default to the platform, so no further action is needed; the datasets need only to comply with using it as prescribed by the
+          STIRData business model. </span></p>
+      <p class="c3"><span class="c1">For the case of business activities, by default the common NACE Rev. 2 vocabulary is built to the system. As mentioned above, the definition of a national extension might be either part of a business registry dataset
+          or externally defined, in an RDF file or residing in a SPARQL endpoint. In the first case the registration of the vocabulary is done automatically, while in the second case the vocabulary has to be manually registered by the platform
+          administrator.</span></p>
+      <p class="c3"><span class="c1">Similar is the case for company type vocabularies, where each used national company type vocabulary should be provided and registered in the same way with the STIRData platform. Built-in to the platform is the generic
+          company types vocabulary.</span></p>
+      <p class="c3"><span class="c1">Once a business registry and the relevant vocabularies have been registered, as a final step of the registration process, the STIRData platform performs an automatic analysis of the dataset contents to identify
+          certain aspects, such as the size of the dataset, the provided dimensions, the values ranges (for the founding and dissolution dates), the used IRI prefixes, and the used NACE national extension levels. The analysis is performed by issuing the
+          appropriate SPARQL queries and the results are stored a database where dataset information is also stored.</span></p>
+      <h1 class="c27" id="h.gs3qtbkjrz97"><span class="c7">Application architecture</span></h1>
+      <p class="c3"><span class="c1">Build on top of the above data architecture, the STIRData platform consists of the STIRData backend, which implements the core functionality and exposes it through the appropriate API calls, and the STIRData portal,
+          which is the frontend that allows an enhanced experience of interacting with the backend to the end user. </span></p>
+      <p class="c3"><span class="c1">The application follows a standard REST API architecture: the frontend translates the requests formulated by the user through the relevant UI to appropriate API calls for the backend, waits for the backend to send the results,
+          and collects and renders them upon completion of the call. A complete Swagger based documentation of the provided API calls is available </span><span class="c12"><a class="c11"
+            target="_blank" href="https://portal.stirdata.eu/api/swagger-ui/index.html">here</a></span><span class="c1">.</span></p>
+      <p class="c6"><span class="c1">Given the decentralized architecture of the platform, that all business registry data reside in remote, third-party managed RDF stores and that the role of the platform is essentially to act as a mediator between the
+          end-user and the business registry datasets, providing a unified access to them, the backend has been designed so as to avoid to the maximum extent possible centralized features that require copying data from the business registries to a
+          central datastore; as described in detail in the data architecture section, the main approach is to keep the data in the SPARQL endpoints of the individual business registry data providers and query them in a decentralized way.</span></p>
+      <h2 class="c4" id="h.ah0oz4ep97ei"><span class="c10">Storage</span></h2>
+      <p class="c24"><span class="c1">Although the business registry data are not stored centrally, the STIRData platform maintains a local storage element. One part of that storage is the list of registered datasets and associated vocabularies, as has
+          already been discussed in the previous section, and which is essential for the operation of the platform since it keeps all necessary information for accessing the datasets and correctly formulating the queries against them. </span></p>
+      <p class="c24"><span class="c1">The above data are stored in a relational database (the STIRData database). The same local database is used also to keep data about precomputed statistics, as well as registered user data, a subject that will be
+          discussed later.</span></p>
+      <p class="c24"><span class="c1">For optimized performance, the STIRData platform also maintains a local copy of the SKOS vocabularies used by the browsable dimensions. Given that those vocabularies are systematically used by several operations of
+          the platform, to avoid the overhead of continuously fetching data from remote triple stores, especially in the cases where the vocabularies reside in different RDF stores than the datasets themselves, the platform keeps in its database, in a
+          local triple store, a copy of all SKOS vocabularies registered by the business registry datasets. These include the NUTS/LAU vocabulary, the NACE Rev. 2 vocabulary and all national extensions, and the company type vocabularies. The local copy
+          is generated at the time of the registration of the vocabularies and during operation are cached in memory for improved performance.</span></p>
+      <h2 class="c4" id="h.k9fq6i7i2733"><span class="c10">Distributed processing of requests</span></h2>
+      <p class="c3"><span class="c1">The core functionality of the STIRData backend the above architecture has to serve is to answer user queries posed through the STIRData portal. Three are the main types of queries that are supported: retrieval
+          queries, search queries and statistics queries.</span></p>
+      <h3 class="c21" id="h.6a0w8qlxfbjv"><span class="c16">Retrieval queries </span></h3>
+      <p class="c3"><span class="c1">Retrieval queries are the simplest type of queries and are used to retrieve information about a specific legal entity given its STIRData IRI. The STIRData backend resolves the IRI against the STIRData database to
+          identify to which business registry it belongs to (using the information about the IRI prefixes obtained by analyzing each dataset upon registration), it then issues a suitable query to the respective SPARQL endpoint requesting all information
+          regarding the legal entity, and returns the results.</span></p>
+      <h3 class="c21" id="h.b96pcz49zmv"><span class="c16">Search queries </span></h3>
+      <p class="c3"><span class="c1">Search queries are used to select sets of companies that satisfy certain conditions determined by the user. A condition has to be on a searchable dimension, and there may be more than one conditions for each dimension
+          (which are typically interpreted disjunctively). E.g. the user may request all companies in the Oslo area in Norway, and in Czechia founded after a certain date that perform one of a specific set of business activities. As discussed above, the
+          conditions regarding the location of a company should be values of the NUTS/LAU vocabulary while the conditions regarding the business activities should be values of the NACE Rev. 2 vocabulary. A search query must specify at least one location.
+        </span></p>
+      <p class="c3"><span class="c1">The STIRData platform analyzes such a query in the following steps:</span></p>
+      <ol class="c0 lst-kix_c6sic8pnjzkd-0 start" start="1">
+        <li class="c3 c17 li-bullet-0"><span class="c1">It identifies which country does the specified location belong to. If the query involves more than one locations in different countries, it identifies the set of respective countries. The countries
+            identified at this step are the query countries.</span></li>
+        <li class="c3 c17 li-bullet-0"><span class="c1">If the query specifies locations at a lower level than the country level (NUTS-0), those locations, which may be provided as NUTS-1, NUTS-2, NUTS-3 or LAU regions, are translated into the respective
+            set of NUTS-3 or LAU regions. I.e. any NUTS-3 or LAU regions remain unchanged, while each NUTS-1, NUTS-2 region is converted into the set of the contained NUTS-3 regions. This is done because these are the administrative unit levels supported
+            by the STIRData business data model. </span></li>
+        <li class="c3 c17 li-bullet-0"><span class="c1">It identifies which other searchable dimensions does the query contain.</span></li>
+        <li class="c3 c17 li-bullet-0"><span class="c1">If the query contains a business activity dimension, which should be expressed in the NACE Rev. 2 vocabulary, then, for each query country, using the NACE Rev. 2 - NACE national extensions
+            equivalences, it transforms each NACE Rev. 2 IRI to the respective NACE national extension IRI. Then each such IRI is converted into a set of IRI that are its children and constitute permissible values for the respective registry. E.g. if the
+            query specifies a NACE Rev 2. at the second level and the permissible values for a specific business registry are at the fifth level, the set of all children of the national extension equivalent to the original activity at that level is
+            constructed.</span></li>
+        <li class="c3 c17 li-bullet-0"><span class="c1">If the query contains a company type dimension (asking for sole proprietorship legal entities or not), then, for each query country, it transforms the sole proprietorship to the respective national
+            vocabulary company type IRI.</span></li>
+        <li class="c3 c17 li-bullet-0"><span class="c1">A SPARQL SELECT query is constructed for each query country, involving all the elements derived in the previous steps as conditions, as well as any foundation and/or dissolution date
+            conditions.</span></li>
+        <li class="c3 c17 li-bullet-0"><span class="c1">Each query is executed against the corresponding business registry SPARQL endpoint, and a separate list of the results obtained from each business registry is returned to the user.</span></li>
+      </ol>
+      <p class="c3"><span class="c1">An example of the above process is illustrated in Figure 3. The original query has been formulated to retrieve all companies with business addresses in the FI1C NUTS-2 region (Southern Finland), having the 52.21 NACE
+          Rev. 2 business activity (Service activities incidental to land transportation) and founded after 01-01-2021. As it can be seen in the figure, the FI1C NUTS-2 region has been converted to its NUTS-3 children (FI1C1, FI1C2, FI1C3, FI1C4, FI1C5)
+          and the 52.21 NACE code to its children at the fifth level of the finnish national extension (TOL2008-52211, TOL2008-52212, TOL2008-52213, TOL2008-52219).</span></p>
+      <p class="c6"><span class="c2">SELECT ?entity</span></p>
+      <p class="c6"><span class="c2">WHERE</span></p>
+      <p class="c6"><span class="c2">&nbsp; { ?entity &nbsp; a &nbsp; &lt;http://www.w3.org/ns/legal#LegalEntity&gt; ;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;http://www.w3.org/ns/legal#legalName&gt; &nbsp;?entityName ;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;http://www.w3.org/ns/legal#registeredAddress&gt; &nbsp;?address .</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; ?address &nbsp;&lt;http://data.europa.eu/m8g/adminUnit&gt; &nbsp;_:b0 .</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; _:b0 &nbsp; &nbsp; &nbsp;&lt;http://data.europa.eu/m8g/code&gt; &nbsp;?nuts3 ;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;http://data.europa.eu/m8g/level&gt; &nbsp;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&lt;https://w3id.org/stirdata/resource/adminLevel/NUTS3&gt;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; VALUES ?nuts3 { &lt;https://w3id.org/stirdata/resource/nuts/item/FI1C1&gt; </span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;https://w3id.org/stirdata/resource/nuts/item/FI1C2&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;https://w3id.org/stirdata/resource/nuts/item/FI1C3&gt; </span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;https://w3id.org/stirdata/resource/nuts/item/FI1C4&gt; </span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;https://w3id.org/stirdata/resource/nuts/item/FI1C5&gt; }</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; ?entity &nbsp;&lt;http://www.w3.org/ns/legal#companyActivity&gt; &nbsp;?nace</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; VALUES ?nace { &lt;http://fi.data.stirdata.eu/resource/nace/tol2008/item/52212&gt; &nbsp;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&lt;http://fi.data.stirdata.eu/resource/nace/tol2008/item/52211&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp;</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&lt;http://fi.data.stirdata.eu/resource/nace/tol2008/item/52213&gt; &nbsp; </span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&lt;http://fi.data.stirdata.eu/resource/nace/tol2008/item/52219&gt; }</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; ?entity &nbsp;&lt;https://schema.org/foundingDate&gt; &nbsp;?foundingDate</span></p>
+      <p class="c6"><span class="c2">&nbsp; &nbsp; FILTER ( ?foundingDate &gt;= &quot;2021-01-01&quot;^^xsd:date )</span></p>
+      <p class="c6"><span class="c2">&nbsp; }</span></p>
+      <p class="c13"><span class="c20">Figure 3: Example search SPARQL to a business registry endpoint.</span></p>
+      <p class="c3"><span class="c1">Using the above strategy, the query can be answered by each respective business registry SPARQL endpoint without any need to resolve the values within the SKOS vocabulary hierarchies. The resolution of such values is
+          done beforehand by the STIRData backend and is incorporated in the actual SPARQL query (using the VALUES constructor). The benefit of this approach is that it works regardless of whether the vocabulary definitions are part of the dataset or
+          reside in other RDF stores, and that it avoids federated SPARQL queries which may have considerably poor performance. Moreover, it avoids complex queries involving multiple path expressions, which may not be fully or efficiently supported by
+          all RDF stores.</span></p>
+      <p class="c3"><span class="c1">Is should also be noted that in the above procedure, the formulation of the query conditions is done at the STIRData frontend, which sends the queries to the STIRData backend, which in turns answers them by
+          dispatching them to the relevant SPARQL endpoints and returns the results to the frontend. Given the distributed nature of the platform, to improve responsiveness, in case a query involves more than one country, the query is separated by the
+          frontend to multiple queries addressed to one country each, so that they can be answered individually by the backend, and the frontend can collect the results from each business registry as soon as they are produced, without having to wait for
+          all business registries to answer before presenting any results to the user.</span></p>
+      <h3 class="c21" id="h.9wo11626gzof"><span class="c16">Statistics queries </span></h3>
+      <p class="c3"><span class="c1">Apart from allowing the user to retrieve lists of companies that meet certain conditions through search queries, an important functionality of the STIRData platform is that it can offer aggregate statistical
+          information. This information may be e.g. the number of companies that perform a certain business activity in a certain region, together with the respective numbers for the sub-activities of the selected activity and for the sub-regions of the
+          selected region. Since such aggregate statistics involve analysis into sub-activites, sub-regions, etc, they are offered only for the browsable dimensions.</span></p>
+      <p class="c3"><span class="c1">Statistics queries are similar to search queries in that they may specify similar selection conditions. The difference is that the result is not a list of matching legal entities, but the number of legal entities
+          satisfying those conditions, possibly along with the numbers of legal entities satisfying the same conditions one level down along a selected set of the browsable dimensions. Due to the similarity of the statistics queries to the search queries
+          regarding the imposed conditions, the first steps of their analysis are the same as the ones outlined above. The only difference is the sixth step, where count aggregate SPARQL SELECT queries are constructed instead. </span></p>
+      <p class="c3"><span class="c1">As mentioned above, however, a statistics query may specify that an analysis is desired also one level down along some of the browsable dimensions. In this case, for each such dimension, the values at the next level
+          of the hierarchy are obtained, and for each one of them, the same steps 1-6 are executed. </span></p>
+      <p class="c3"><span class="c1">For instance, in the previous example, the respective statistics query would return the number of all entities satisfying the given condition, while an analysis along the business activity dimension, would return the
+          number of entities performing each one of the TOL2008-52211, TOL2008-52212, TOL2008-52213, TOL2008-52219 business activities (the children of the specified business activity), all the other conditions held constant, and similarly for an
+          analysis along the location dimension.</span></p>
+      <p class="c3"><span class="c1">In case a statistics query specifies multiple conditions for a single dimension, they are interpreted disjunctively, and as root for the analysis along the values of the hierarchy of that dimension their most specific
+          common parent is considered.</span></p>
+      <h2 class="c4" id="h.25vm1t9tj6vp"><span class="c10">Precomputation of aggregate statistics</span></h2>
+      <p class="c3"><span class="c1">From the above discussion of statistics queries, it follows that they may be particularly useful to a user looking for an overview of the business status e.g. in certain regions. For this reason, apart from allowing
+          the user to explicitly formulate a custom statistics query, the STIRData platform allows browsing through the location and business activity dimensions, by showing at the same time the corresponding statistical information.</span></p>
+      <p class="c3"><span class="c1">However, given that the computation of such statistical information involves executing possibly multiple complex SPARQL queries against RDF stores containing potentially millions of RDF triples, and hence that they
+          may need significant time to complete, their real-time computation is problematic. For this reason the STIRData platform adopts the approach of precomputing offline such statistics. In particular, each time a new business registry dataset is
+          registered or a business registry dataset is updated, the STIRData platform initiates a background process that explores the dataset along the browsable dimensions and computes the respective statistics for the resulting partitions. Due to the
+          explosion in the number of combinations for arbitrary numbers of dimensions, statistics are calculated for combinations of only up to two dimensions (e.g. location - business activity, business activity - foundation date). </span></p>
+      <p class="c3"><span class="c1">The precomputation of statistics may take from several hours to several days, depending on the size of a dataset and the dimension it supports. During computation, the results are temporarily saved in an intermediate,
+          non-relational storage, and only upon successful completion of the entire computation they are copied to the STIRData database, where they overwrite any preexisting computations for the same dataset. </span></p>
+      <p class="c3"><span class="c1">The screenshot of figure 4 shows two records, as saved in the intermediate database, regarding the precomputed statistics for the location - business activity dimensions combination (NUTSLAU_NACE) for the finnish
+          business registry. It is shown that for each record, the count and the values of the relevant dimensions as well as of their parents are kept.</span></p>
+      <p class="c3"><span
+          style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 100%; height: 345.33px;"><img alt=""
+            src="../assets/images/technical-architecture/image2.png" style="width: 624.00px; height: 345.33px; margin: auto; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>
+      <p class="c13"><span class="c20">Figure 4: Precomputed statistics.</span></p>
+      <p class="c3"><span class="c1">Given the precomputed statistics, once a statistics query is posed in the STIRData platform, the backend checks whether it can answer it by a lookup in the database, and only if this is not possible it proceeds to
+          answering it through issuing SPARQL queries to the relevant business registry datastores. Because of the above approach, the local storing of the precomputed statistics that is part of the centralized features of the STIRData platforms, does
+          not harm its overall decentralized architecture, but is highly desirable for optimized performance. A final note regarding the computation of statistics is that because the statistics may take considerable long time to compute, the precomputed
+          statistics may not always be synchronized with the actual business registry datasets. </span></p>
+      <h2 class="c4" id="h.af8l0rwj2man"><span>User management</span></h2>
+      <p class="c3"><span class="c1">In order to provide enhanced user experience, the STIRData platform supports user login. This functionality allows for personalization of business registry exploration, through saving by the users of their oftenly
+          used queries so that they can be executed again at later times without having to be rebuilt each time.</span></p>
+      <p class="c3"><span class="c1">In order to implement this functionality (described in a later section), the STIRData platform implements a full user management module, which supports three options for user registration:</span></p>
+      <ul class="c0 lst-kix_m2jtpwbsyl2a-0 start">
+        <li class="c3 c17 li-bullet-0"><span class="c1">Standard username/password registration</span></li>
+        <li class="c3 c17 li-bullet-0"><span class="c1">Google oauth2 login</span></li>
+        <li class="c3 c17 li-bullet-0"><span class="c1">SOLID login</span></li>
+      </ul>
+      <p class="c3"><span class="c1">In the username/password registration procedure, the credentials of the user are stored in the STIRData database, while for the two other options, the platform communicates with either Google or any SOLID provider to
+          get the data that the user has provided access to.</span></p>
+      <h1 class="c8" id="h.t6s1cxnjm64d"><span class="c7">Technologies</span></h1>
+      <p class="c6"><span class="c1">The STIRData backend has been built on top of Spring Boot 2.5.0, using Java 17. Relational local storage is provided by a PostgreSQL server, intermediate storage for the statistics precomputation is provided by a
+          MongoDB server, and the SKOS vocabularies are locally stored in an OpenLink Virtuoso 7.20 installation.</span></p>
+      <p class="c6 c14"><span class="c1"></span></p>
+      <p class="c6"><span class="c1">The STIRData frontend is a Vue.js application which has been built using the open source framework NuxtJS (version 2.15.3). The programming language used is JavaScript, and the UI framework/library used is Bootstrap
+          (version 4.6). For the building and deployment of the platform, we are using the Node.js (version 14) open source server environment.</span></p>
+    </div>
+  </section>
+
+  <footer-component></footer-component>
+</body>
+
+</html>
