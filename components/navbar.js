@@ -31,6 +31,7 @@ class Navbar extends HTMLElement {
                 <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/ecg">ECG</a></li>
                 <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/objectives">Objectives</a></li>
                 <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/news">News</a></li>
+                <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="https://portal.stirdata.eu/" target="_blank">Platform</a></li>
               </ul>
             </div>
           </div>
