@@ -4403,3 +4403,13 @@ a {
   padding-bottom: 0.2em;
   border-bottom: 1px solid #E9E6DF;
 }
+
+.image-wrapper-header {
+  margin: auto;
+  width: 65%;
+}
+@media screen and (max-width: 991px) {
+  .image-wrapper-header {
+    width: 92% !important;
+  }
+}
