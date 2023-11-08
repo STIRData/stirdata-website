@@ -6,13 +6,13 @@ class Card extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <div class="item-wrapper">
-        <a href=${this.getAttribute('url')}>
+        <a href=${this.getAttribute('url')} target=${this.getAttribute('target')}>
           <div class="item-img">
             <img src=${this.getAttribute('thumbnail')} alt="" title=${this.getAttribute('title')}>
           </div>
           <div class="item-content mb-4">
             <h5 class="item-title mbr-fonts-style display-5">
-              <a class="text-primary" href=${this.getAttribute('url')}>
+              <a class="text-primary" href=${this.getAttribute('url')} target=${this.getAttribute('target')}>
                 ${this.getAttribute('title')}
               </a>
             </h5>
